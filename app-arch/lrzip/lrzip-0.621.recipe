@@ -1,0 +1,60 @@
+SUMMARY="Long Range ZIP or Lzma RZIP optimized for compressing large files"
+DESCRIPTION="This is a compression program optimised for large files. The larger the file \
+and the more memory you have, the better the compression advantage this will \
+provide, especially once the files are larger than 100MB. The advantage can \
+be chosen to be either size (much smaller than bzip2) or speed (much faster \
+than bzip2)."
+HOMEPAGE="http://ck.kolivas.org/apps/lrzip/"
+COPYRIGHT="Con Kolivas
+	Peter Hyman
+	"
+LICENSE="GNU GPL v2"
+REVISION="1"
+SOURCE_URI="http://ck.kolivas.org/apps/lrzip/lrzip-0.621.tar.bz2"
+CHECKSUM_SHA256="31c26fbee8b9b0bd413ca214862dbc0d9e6d3477f23e9839774936bf140ceb6b"
+#SOURCE_DIR=""
+PATCHES="lrzip-$portVersion.patch"
+
+ARCHITECTURES="x86 ?x86_64"
+SECONDARY_ARCHITECTURES="x86"
+
+PROVIDES="
+	lrzip${secondaryArchSuffix} = $portVersion
+	"
+REQUIRES="
+	haiku$secondaryArchSuffix >= $haikuVersion
+	lib:libz${secondaryArchSuffix}
+	lib:libbz2${secondaryArchSuffix}
+	lib:liblzo2${secondaryArchSuffix}
+	"
+
+BUILD_REQUIRES="
+	devel:libz${secondaryArchSuffix}
+	devel:libbz2${secondaryArchSuffix}
+	devel:liblzo2${secondaryArchSuffix}
+	"
+
+BUILD_PREREQUIRES="
+	haiku${secondaryArchSuffix}_devel
+	cmd:autoreconf
+	cmd:aclocal
+	cmd:awk
+	cmd:diff
+	cmd:gcc${secondaryArchSuffix}
+	cmd:ld${secondaryArchSuffix}
+	cmd:libtool
+	cmd:make
+	cmd:pod2man
+	"
+
+BUILD()
+{
+	autoreconf
+	runConfigure ./configure
+	make $jobArgs
+}
+
+INSTALL()
+{
+	make install
+}
