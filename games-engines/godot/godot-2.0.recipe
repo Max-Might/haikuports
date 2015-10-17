@@ -1,0 +1,51 @@
+SUMMARY="A free and open source game engine"
+DESCRIPTION="Godot is an advanced, feature packed, multi-platform 2D \
+and 3D game engine. It provides a huge set of common tools, so you can \
+just focus on making your game without reinventing the wheel."
+HOMEPAGE="http://www.godotengine.org/"
+COPYRIGHT="2007-2014 Juan Linietsky, Ariel Manzur"
+LICENSE="MIT"
+REVISION="1"
+SOURCE_URI="git+https://github.com/Max-Might/godot.git"
+#CHECKSUM_SHA256
+#SOURCE_DIR
+#PATCHES
+
+ARCHITECTURES="x86 ?x86_64"
+SECONDARY_ARCHITECTURES="x86"
+
+PROVIDES="
+	godot${secondaryArchSuffix} = $portVersion
+	app:Godot = $portVersion
+	"
+REQUIRES="
+	haiku${secondaryArchSuffix} >= $haikuVersion
+	lib:libGL${secondaryArchSuffix}
+	lib:libGLEW${secondaryArchSuffix}
+	lib:libGLU${secondaryArchSuffix}
+	lib:libz${secondaryArchSuffix}
+	"
+
+BUILD_REQUIRES="
+	devel:libGL${secondaryArchSuffix}
+	devel:libGLEW${secondaryArchSuffix}
+	devel:libGLU${secondaryArchSuffix}
+	devel:libz${secondaryArchSuffix}
+	"
+BUILD_PREREQUIRES="
+	haiku${secondaryArchSuffix}_devel
+	cmd:g++${secondaryArchSuffix}
+	cmd:scons
+	"
+
+BUILD()
+{
+	scons platform=haiku $jobArgs
+}
+
+INSTALL()
+{
+	mkdir -p $appsDir
+	cp bin/godot.haiku.tools.32 $appsDir/Godot
+	addAppDeskbarSymlink $appsDir/Godot
+}
